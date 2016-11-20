@@ -16,17 +16,23 @@ while True:
     protocal = req[0].split(" ")
     try:
         filename = protocal[1]
+        print filename
 
         if (protocal[0] == "POST"):
-		dataArray = request[len(request)-1].split("&")
-		data = {}
-		for dataEntry in dataArray:
-			data[dataEntry.split('=')[0]] = dataEntry.split('=')[1];
+            dataArray = req[len(req)-1].split("&")
 
-		if not os.path.exists('./data/'+data['room']):
-			os.makedirs('./data/'+data['room'])
+            print dataArray
+            data = {}
+            for dataEntry in dataArray:
+                print dataEntry
+                data[dataEntry.split('=')[0]] = dataEntry.split('=')[1]
 
-		room = open('./data/'+data['room']+'/1', 'w+')
+            print data
+            
+            if not os.path.exists('./data/'+data['room']):
+                os.makedirs('./data/'+data['room'])
+
+                room = open('./data/'+data['room']+'/1', 'w+')
 
         elif (protocal[0] == "GET"):
             if(filename == "/"):
@@ -41,6 +47,7 @@ HTTP/1.1 200 OK
 %s
 """
     except Exception as e:
+        print e
         filecontent = ""
         http_response = """\
 HTTP/1.1 404 Not Found
