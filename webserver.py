@@ -14,16 +14,27 @@ while True:
     req = request.split("\r\n")
     protocal = req[0].split(" ")
     filename = protocal[1]
-    if(filename == "/"):
-        rf = open('./serverfiles/index.html', 'r')
-    else:
-        rf = open('./serverfiles' + filename, 'r')
-    
-    filecontent = rf.read()
-    http_response = """\
+    try:
+        if(filename == "/"):
+            rf = open('./serverfiles/index.html', 'r')
+        else:
+            rf = open('./serverfiles' + filename, 'r')
+
+        filecontent = rf.read()
+        http_response = """\
 HTTP/1.1 200 OK
 
 %s
 """
+        pass
+
+    except Exception as e:
+        filecontent = ""
+        http_response = """\
+HTTP/1.1 404 Not Found
+
+%s
+"""
+
     client_connection.sendall(http_response  % (filecontent))
     client_connection.close()
