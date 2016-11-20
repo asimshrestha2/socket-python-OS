@@ -11,11 +11,12 @@ while True:
     client_connection, client_address = listen_socket.accept()
     request = client_connection.recv(1024)
     print request
-
+    indexfile = open('./serverfiles/index.html', 'r')
+    indexfilecontent = indexfile.read()
     http_response = """\
 HTTP/1.1 200 OK
 
-Hello, World!
+%s
 """
-    client_connection.sendall(http_response)
+    client_connection.sendall(http_response  % (indexfilecontent))
     client_connection.close()
