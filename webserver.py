@@ -23,9 +23,10 @@ while True:
 		for dataEntry in dataArray:
 			data[dataEntry.split('=')[0]] = dataEntry.split('=')[1];
 
-            if not os.path.exists('./data/'+data['room']):
-                os.makedirs('./data/'+data['room'])
-            room = open('./data/'+data['room']+'/1', 'w+')
+		if not os.path.exists('./data/'+data['room']):
+			os.makedirs('./data/'+data['room'])
+
+		room = open('./data/'+data['room']+'/1', 'w+')
 
         elif (protocal[0] == "GET"):
             if(filename == "/"):

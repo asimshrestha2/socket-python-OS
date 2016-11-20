@@ -21,7 +21,7 @@ while True:
 		dataArray = request[len(request)-1].split("&")
 		data = {}
 		for dataEntry in dataArray:
-			data[''+dataEntry.split('=')[0]] = dataEntry.split('=')[1];
+			data[dataEntry.split('=')[0]] = dataEntry.split('=')[1];
 
             if not os.path.exists('./data/'+data['room']):
                 os.makedirs('./data/'+data['room'])
