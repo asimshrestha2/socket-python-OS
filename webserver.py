@@ -1,4 +1,5 @@
 import socket
+import os
 
 HOST, PORT = '', 8888
 
@@ -26,6 +27,13 @@ HTTP/1.1 200 OK
 
 %s
 """
+	if(protocal[0] == "POST"):
+		roomName = request[request.length-1].split("&")[0].split("=")[0] 
+
+		if not os.path.exists('./data/'+roomName):
+			os.makedirs('./data/'+roomName))
+		room = open('./data/'+roomName+'/1', 'w+')
+
         pass
 
     except Exception as e:
