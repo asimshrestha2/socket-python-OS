@@ -10,13 +10,19 @@ print 'Serving HTTP on port %s ...' % PORT
 while True:
     client_connection, client_address = listen_socket.accept()
     request = client_connection.recv(1024)
-    print request
-    indexfile = open('./serverfiles/index.html', 'r')
-    indexfilecontent = indexfile.read()
+    req = request.split("\r\n")
+    protocal = req[0].split(" ")
+    filename = protocal[1]
+    if(filename == "/"):
+        rf = open('./serverfiles/index.html', 'r')
+    else:
+        rf = open('./serverfiles' + filename, 'r')
+    
+    filecontent = rf.read()
     http_response = """\
 HTTP/1.1 200 OK
 
 %s
 """
-    client_connection.sendall(http_response  % (indexfilecontent))
+    client_connection.sendall(http_response  % (filecontent))
     client_connection.close()
