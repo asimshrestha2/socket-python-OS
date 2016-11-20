@@ -17,15 +17,14 @@ while True:
     try:
         filename = protocal[1]
 
-    	if(protocal[0] == "POST"):
-    		roomName = request[request.length-1].split("&")[0].split("=")[0]
+        if (protocal[0] == "POST"):
+            roomName = request[request.length-1].split("&")[0].split("=")[0]
 
-    		if not os.path.exists('./data/'+roomName):
-    			os.makedirs('./data/'+roomName))
-    		room = open('./data/'+roomName+'/1', 'w+')
+            if not os.path.exists('./data/'+roomName):
+                os.makedirs('./data/'+roomName)
+            room = open('./data/'+roomName+'/1', 'w+')
 
-            pass
-        else if (protocal[0] == "GET"):
+        elif (protocal[0] == "GET"):
             if(filename == "/"):
                 rf = open('./serverfiles/index.html', 'r')
             else:
@@ -37,7 +36,6 @@ HTTP/1.1 200 OK
 
 %s
 """
-            pass
     except Exception as e:
         filecontent = ""
         http_response = """\
