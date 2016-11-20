@@ -13,8 +13,8 @@ while True:
     print request
     req = request.split("\r\n")
     protocal = req[0].split(" ")
-    filename = protocal[1]
     try:
+        filename = protocal[1]
         if(filename == "/"):
             rf = open('./serverfiles/index.html', 'r')
         else:
