@@ -10,6 +10,7 @@ print 'Serving HTTP on port %s ...' % PORT
 while True:
     client_connection, client_address = listen_socket.accept()
     request = client_connection.recv(1024)
+    print request
     req = request.split("\r\n")
     protocal = req[0].split(" ")
     filename = protocal[1]
