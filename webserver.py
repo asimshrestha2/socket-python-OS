@@ -18,7 +18,7 @@ while True:
         filename = protocal[1]
 
         if (protocal[0] == "POST"):
-            roomName = request[request.length-1].split("&")[0].split("=")[0]
+            roomName = request[len(request)-1].split("&")[0].split("=")[0]
 
             if not os.path.exists('./data/'+roomName):
                 os.makedirs('./data/'+roomName)
