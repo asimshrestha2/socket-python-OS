@@ -1,5 +1,6 @@
 import socket
 import os
+import io
 
 HOST, PORT = '', 8888
 
@@ -21,18 +22,37 @@ while True:
         if (protocal[0] == "POST"):
             dataArray = req[len(req)-1].split("&")
 
-            print dataArray
+            #print dataArray
             data = {}
             for dataEntry in dataArray:
-                print dataEntry
-                data[dataEntry.split('=')[0]] = dataEntry.split('=')[1]
-
+                #print dataEntry
+                naval = dataEntry.split('=')
+                data[naval[0]] = naval[1]
             print data
-            
-            if not os.path.exists('./data/'+data['room']):
-                os.makedirs('./data/'+data['room'])
 
-                room = open('./data/'+data['room']+'/1', 'w+')
+            if (filename == "/update"):
+                newfile = False
+                if not os.path.exists('./data/'+data['room']):
+                    newfile = True
+                    os.makedirs('./data/'+data['room'])
+
+                roomdata = io.open('./data/'+data['room']+'/1', 'w+', encoding='utf8')
+
+                if newfile or roomdata.read() == "":
+                    roomdata.write(u'0,0\n')
+
+                roomdata.close();
+                filecontent = ""
+                with open('./data/'+data['room']+'/1', 'r') as f:
+                    filecontent = f.read()
+
+                print filecontent
+                http_response = """\
+HTTP/1.1 200 OK
+
+%s
+"""
+
 
         elif (protocal[0] == "GET"):
             if(filename == "/"):
