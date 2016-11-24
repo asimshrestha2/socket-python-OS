@@ -1,6 +1,7 @@
 import socket
 import os
 import io
+from requestapp import Requestapp
 
 HOST, PORT = '', 8888
 
@@ -47,33 +48,21 @@ while True:
                     filecontent = f.read()
 
                 print filecontent
-                http_response = """\
-HTTP/1.1 200 OK
-
-%s
-"""
+                http_response = Requestapp(filename, filecontent).getResponse()
 
 
         elif (protocal[0] == "GET"):
             if(filename == "/"):
                 rf = open('./serverfiles/index.html', 'r')
+                filename = "/index.html"
             else:
                 rf = open('./serverfiles' + filename, 'r')
 
             filecontent = rf.read()
-            http_response = """\
-HTTP/1.1 200 OK
-
-%s
-"""
+            http_response = Requestapp(filename, filecontent).getResponse()
     except Exception as e:
         print e
-        filecontent = ""
-        http_response = """\
-HTTP/1.1 404 Not Found
+        http_response = Requestapp("", "", 404).getResponse()
 
-%s
-"""
-
-    client_connection.sendall(http_response  % (filecontent))
+    client_connection.sendall(http_response)
     client_connection.close()
