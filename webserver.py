@@ -93,7 +93,7 @@ while True:
 		    	    player2data = roomdata2.read()
 			    roomdata1.close()
 			    roomdata2.close()
-			    count++;
+			    count++
 
 			#if count equals 10, then there's a timeout
 			if(count == 10):

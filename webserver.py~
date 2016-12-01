@@ -73,6 +73,8 @@ while True:
 			client_connection.close()
 
 		    if(data['room'] > 0 and data['player'] > 0):
+
+			#gather player data for each player for checking if two players are in a room
 		    	roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
 		    	roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
 		    	player1data = roomdata1.read()
@@ -91,7 +93,7 @@ while True:
 		    	    player2data = roomdata2.read()
 			    roomdata1.close()
 			    roomdata2.close()
-			    count++;
+			    count++
 
 			#if count equals 10, then there's a timeout
 			if(count == 10):
