@@ -46,12 +46,12 @@ while True:
 		    #[0-1],[0-3] first number is 'is there' bit, and second number is 0 for not chosen and 1-3 for rock/paper/scissors
 		    #creates player 1 and 2 data, player 1 first value is set to 1 for "is there"
 		    #w+ opens for reading and writing and creates file if it doesnt exist
-                    roomdata = io.open('./data/'+data['room']+'/1', 'w+', encoding='utf8') 
+                    roomdata = io.open('./data/'+data['room']+'/1', 'w+', encoding='utf8')
                     roomdata.write(u'1,0\n')
-		    roomdata.close()
+        		    roomdata.close()
                     roomdata = io.open('./data/'+data['room']+'/2', 'w+', encoding='utf8')
                     roomdata.write(u'0,0\n')
-		    roomdata.close()
+        		    roomdata.close()
 
 		    #send response with what player they are, player 1 if room is created
 		    http_response = Requestapp(filename, "player=1").getResponse()
@@ -66,7 +66,7 @@ while True:
 		    	roomdata.write(u'1,' + data['item'] + '\n') #puts 1,[1-3] in file. If player made a choice, then they have to be in the room ex. 1,2
 			roomdata.close()
 
-		    else: 
+		    else:
 			#if room exists and choice is 0 and player is 0, then they are player 2. Send response data "player=2" for Javascript to retreive and use in next request
 			http_response = Requestapp(filename, "player=2").getResponse()
 			client_connection.sendall(http_response)
@@ -149,4 +149,3 @@ while True:
 #Accesses both player data files, and returns either 1 or 2 for which player won
 def findWinner(roomnum):
 	return 1
-	
