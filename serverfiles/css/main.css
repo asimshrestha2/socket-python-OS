@@ -75,7 +75,7 @@ footer{
 }
 
 .selection{
-  width: 50%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
