@@ -6,6 +6,16 @@ window.onload = function() {
   var playernum = player.split("=")[1];
   document.getElementById('playernum').innerHTML = "You are player: " + playernum;
 
+  document.getElementById('rock').addEventListener("click", function() {
+    postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=1");
+  });
+  document.getElementById('paper').addEventListener("click", function() {
+    postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=2");
+  });
+  document.getElementById('scissor').addEventListener("click", function() {
+    postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=3");
+  });
+
   setInterval(function () {
     var winner = postRequestURL("/update", "room=" + room + "&player=" + playernum);
     var winnernum = player.split("=")[1];
@@ -13,16 +23,6 @@ window.onload = function() {
       document.getElementById('winner').innerHTML = "The Winner: " + winnernum;
     }
   }, 100);
-
-  document.getElementById('rock').addEventListener("click", function() {
-    postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=1");
-  });
-  document.getElementById('rock').addEventListener("click", function() {
-    postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=2");
-  });
-  document.getElementById('rock').addEventListener("click", function() {
-    postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=3");
-  });
 
 }
 
