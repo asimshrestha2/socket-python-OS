@@ -4,6 +4,32 @@ import io
 import time
 from requestapp import Requestapp
 
+#Accesses both player data files, and returns either 1 or 2 for which player won
+def getWinner(roomnum):
+    roomdata1 = io.open('./data/'+ roomnum +'/1', 'r', encoding='utf8')
+    roomdata2 = io.open('./data/'+ roomnum +'/2', 'r', encoding='utf8')
+    player1data = roomdata1.read().encode('utf-8')
+    player2data = roomdata2.read().encode('utf-8')
+    roomdata1.close()
+    roomdata2.close()
+
+    player1data = int(player1data.split("\n")[0].split(",")[1])
+    player2data = int(player2data.split("\n")[0].split(",")[1])
+
+    print player1data == 1
+    print player2data == 1
+
+    if((player1data == 1 and player2data == 2) or
+       (player1data == 2 and player2data == 3) or
+       (player1data == 3 and player2data == 1)):
+        return 2
+    elif((player2data  == 1 and player1data == 2) or
+       (player2data == 2 and player1data == 3) or
+       (player2data == 3 and player1data == 1)):
+        return 1
+    else:
+        return 0
+
 HOST, PORT = '', 8888
 
 listen_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -97,47 +123,34 @@ while True:
                 #If player 1, check player 2 data file to check if theyre there
                 roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
                 roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
-                player1data = roomdata1.read().encode('utf-8')
-                player2data = roomdata2.read().encode('utf-8')
+                player1data = roomdata1.read().split("\n")[0].split(",")
+                player2data = roomdata2.read().split("\n")[0].split(",")
                 roomdata1.close()
                 roomdata2.close()
 
-                player1data = player1data.split("\n")[0].split(",")
-                player2data = player2data.split("\n")[0].split(",")
-
                 if(data['player'] == '1' ):
-                    roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
-                    player2data = roomdata2.read()
-                    roomdata2.close()
-                    if(player2data[0] != 1):
+                    if(player2data[0] != '1'):
                         http_response = Requestapp(filename, "winner=0").getResponse()
 
                 #If player 2, check player 1 data file to check if theyre there
                 elif(data['player'] == '2'):
-
                     if(player1data[0] != '1'):
                         http_response = Requestapp(filename, "winner=0").getResponse()
 
-                        roomdata1 = io.open('./data/'+data['room']+'/1', 'w+', encoding='utf8')
-                        roomdata2 = io.open('./data/'+data['room']+'/2', 'w+', encoding='utf8')
-                        player1data = roomdata1.read()
-                        player2data = roomdata2.read()
-                        roomdata1.close()
-                        roomdata2.close()
-
-                    #if player 1 and player 2 both made choices
-                    if(player1data[1] != '0' and player2data[1] != '0'):
-                        winner = getWinner(room['data'])
-                        http_response = Requestapp(filename, "winner="+winner).getResponse()
-
-                    else:
-                        http_response = Requestapp(filename, "winner=0").getResponse()
+                #if player 1 and player 2 both made choices
+                if(player1data[1] is not '0' and player2data[1] is not '0'):
+                    winner = getWinner(data['room'])
+                    http_response = Requestapp(filename, "winner="+str(winner)).getResponse()
+                else:
+                    http_response = Requestapp(filename, "winner=0").getResponse()
 
             #update player data with their choice
             elif(filename == "/reply"):
                     roomdata = io.open('./data/'+data['room']+'/'+data['player'], 'w+', encoding='utf8')
                     roomdata.write(u'2,'+data['item']+'\n')
                     roomdata.close()
+
+                    http_response = Requestapp(filename, "").getResponse()
 
             #when player leaves, a request is made to 'empty' file
             elif(filename == "/playerleaves"):
@@ -164,17 +177,3 @@ while True:
 
     client_connection.sendall(http_response)
     client_connection.close()
-
-#Accesses both player data files, and returns either 1 or 2 for which player won
-def getWinner(roomnum):
-    roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
-    roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
-    player1data = roomdata1.read().encode('utf-8')
-    player2data = roomdata2.read().encode('utf-8')
-    roomdata1.close()
-    roomdata2.close()
-
-    player1data = player1data.split("\n")[0].split(",")
-    player2data = player2data.split("\n")[0].split(",")
-
-    return 1
