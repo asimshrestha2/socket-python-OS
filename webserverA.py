@@ -93,49 +93,49 @@ while True:
                     else:
                         http_response = Requestapp(filename, "player=-1").getResponse()
 
-        elif(filename == "/update"):
-            #If player 1, check player 2 data file to check if theyre there
-            if( data['player'] == 1 ):
-                roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
-                player2data = roomdata2.read()
-                roomdata2.close()
-                if(player2data[0] != 1):
-                    http_response = Requestapp(filename, "winner=0").getResponse()
-
-            #If player 2, check player 1 data file to check if theyre there
-            elif(data['player'] == 2):
-                roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
-                player1data = roomdata2.read()
-                roomdata1.close()
-                if(player1data[0] != 1):
-                    http_response = Requestapp(filename, "winner=0").getResponse()
-
-                    roomdata1 = io.open('./data/'+data['room']+'/1', 'w+', encoding='utf8')
-                    roomdata2 = io.open('./data/'+data['room']+'/2', 'w+', encoding='utf8')
-                    player1data = roomdata1.read()
+            elif(filename == "/update"):
+                #If player 1, check player 2 data file to check if theyre there
+                if(data['player'] == 1 ):
+                    roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
                     player2data = roomdata2.read()
-                    roomdata1.close()
                     roomdata2.close()
+                    if(player2data[0] != 1):
+                        http_response = Requestapp(filename, "winner=0").getResponse()
 
-                #if player 1 and player 2 both made choices
-                if(player1data[2] > 0 and player2data[2] > 0):
-                    winner = getWinner(room['data'])
-                    http_response = Requestapp(filename, "winner="+winner).getResponse()
+                #If player 2, check player 1 data file to check if theyre there
+                elif(data['player'] == 2):
+                    roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
+                    player1data = roomdata2.read()
+                    roomdata1.close()
+                    if(player1data[0] != 1):
+                        http_response = Requestapp(filename, "winner=0").getResponse()
 
-                else:
-                    http_response = Requestapp(filename, "Both players need to make a choice").getResponse()
+                        roomdata1 = io.open('./data/'+data['room']+'/1', 'w+', encoding='utf8')
+                        roomdata2 = io.open('./data/'+data['room']+'/2', 'w+', encoding='utf8')
+                        player1data = roomdata1.read()
+                        player2data = roomdata2.read()
+                        roomdata1.close()
+                        roomdata2.close()
 
-        #update player data with their choice
-        elif(filename == "/reply"):
+                    #if player 1 and player 2 both made choices
+                    if(player1data[2] > 0 and player2data[2] > 0):
+                        winner = getWinner(room['data'])
+                        http_response = Requestapp(filename, "winner="+winner).getResponse()
+
+                    else:
+                        http_response = Requestapp(filename, "Both players need to make a choice").getResponse()
+
+            #update player data with their choice
+            elif(filename == "/reply"):
+                    roomdata = io.open('./data/'+data['room']+'/'+data['player'], 'w+', encoding='utf8')
+                    roomdata.write(u'2,'+data['item']+'\n')
+                    roomdata.close()
+
+            #when player leaves, a request is made to 'empty' file
+            elif(filename == "/playerleaves"):
                 roomdata = io.open('./data/'+data['room']+'/'+data['player'], 'w+', encoding='utf8')
-                roomdata.write(u'2,'+data['item']+'\n')
+                roomdata.write(u'0,'+data['item']+'\n')
                 roomdata.close()
-
-        #when player leaves, a request is made to 'empty' file
-        elif(filename == "/playerleaves"):
-            roomdata = io.open('./data/'+data['room']+'/'+data['player'], 'w+', encoding='utf8')
-            roomdata.write(u'0,'+data['item']+'\n')
-            roomdata.close()
 
         elif (protocal[0] == "GET"):
             if(filename == "/"):

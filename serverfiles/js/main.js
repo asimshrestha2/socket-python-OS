@@ -1,10 +1,10 @@
 var playernum = 0;
-
+var room = 0;
 window.onload = function() {
-  var room = prompt("Please enter your room number!");
+  room = prompt("Please enter your room number!");
   console.log(room);
 
-  var player = postPlayerNum("/newroom", "room=" + room);
+  postPlayerNum("/newroom", "room=" + room);
   /*
   document.getElementById('rock').addEventListener("click", function() {
     postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=1");
