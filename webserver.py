@@ -95,7 +95,17 @@ while True:
 
             elif(filename == "/update"):
                 #If player 1, check player 2 data file to check if theyre there
-                if(data['player'] == 1 ):
+                roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
+                roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
+                player1data = roomdata1.read().encode('utf-8')
+                player2data = roomdata2.read().encode('utf-8')
+                roomdata1.close()
+                roomdata2.close()
+
+                player1data = player1data.split("\n")[0].split(",")
+                player2data = player2data.split("\n")[0].split(",")
+
+                if(data['player'] == '1' ):
                     roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
                     player2data = roomdata2.read()
                     roomdata2.close()
@@ -103,11 +113,9 @@ while True:
                         http_response = Requestapp(filename, "winner=0").getResponse()
 
                 #If player 2, check player 1 data file to check if theyre there
-                elif(data['player'] == 2):
-                    roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
-                    player1data = roomdata2.read()
-                    roomdata1.close()
-                    if(player1data[0] != 1):
+                elif(data['player'] == '2'):
+
+                    if(player1data[0] != '1'):
                         http_response = Requestapp(filename, "winner=0").getResponse()
 
                         roomdata1 = io.open('./data/'+data['room']+'/1', 'w+', encoding='utf8')
@@ -118,12 +126,12 @@ while True:
                         roomdata2.close()
 
                     #if player 1 and player 2 both made choices
-                    if(player1data[2] > 0 and player2data[2] > 0):
+                    if(player1data[1] != '0' and player2data[1] != '0'):
                         winner = getWinner(room['data'])
                         http_response = Requestapp(filename, "winner="+winner).getResponse()
 
                     else:
-                        http_response = Requestapp(filename, "Both players need to make a choice").getResponse()
+                        http_response = Requestapp(filename, "winner=0").getResponse()
 
             #update player data with their choice
             elif(filename == "/reply"):
@@ -159,4 +167,14 @@ while True:
 
 #Accesses both player data files, and returns either 1 or 2 for which player won
 def getWinner(roomnum):
+    roomdata1 = io.open('./data/'+data['room']+'/1', 'r', encoding='utf8')
+    roomdata2 = io.open('./data/'+data['room']+'/2', 'r', encoding='utf8')
+    player1data = roomdata1.read().encode('utf-8')
+    player2data = roomdata2.read().encode('utf-8')
+    roomdata1.close()
+    roomdata2.close()
+
+    player1data = player1data.split("\n")[0].split(",")
+    player2data = player2data.split("\n")[0].split(",")
+
     return 1
