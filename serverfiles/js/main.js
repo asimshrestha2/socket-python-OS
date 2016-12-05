@@ -5,7 +5,6 @@ window.onload = function() {
   console.log(room);
 
   postPlayerNum("/newroom", "room=" + room);
-  /*
   document.getElementById('rock').addEventListener("click", function() {
     postRequestURL("/reply", "room=" + room + "&player=" + playernum + "&item=1");
   });
@@ -17,13 +16,8 @@ window.onload = function() {
   });
 
   setInterval(function () {
-    var winner = postRequestURL("/update", "room=" + room + "&player=" + playernum);
-    var winnernum = player.split("=")[1];
-    if(winnernum != 0 && winnernum !== undefined){
-      document.getElementById('winner').innerHTML = "The Winner: " + winnernum;
-    }
+    postWinner("/update", "room=" + room + "&player=" + playernum);
   }, 1000);
-  */
 };
 
 window.onbeforeunload = function () {
@@ -53,11 +47,34 @@ function postPlayerNum(url, body) {
       }
     }
   };
-}
+};
+
+function postWinner(url, body) {
+  url = 'http://' + document.location.hostname + ':' + document.location.port + url
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  //'room=1234&player=1&item=0'
+  xhr.send(body);
+  var result = "";
+  xhr.onload = function () {
+    // do something to response
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        result = xhr.responseText;
+        console.log(result.split("="));
+        winnernum = result.split("=")[1];
+        if(winnernum != 0 && winnernum !== undefined){
+          document.getElementById('winner').innerHTML = "The Winner: " + winnernum;
+        }
+      }
+    }
+  };
+};
 
 
 function postRequestURL(url, body) {
-  url = 'http://localhost:8888' + url
+  url = 'http://' + document.location.hostname + ':' + document.location.port + url
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url, true);
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -74,4 +91,4 @@ function postRequestURL(url, body) {
       }
     }
   };
-}
+};
