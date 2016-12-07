@@ -56,7 +56,7 @@ while True:
             client_connection, client_address = acceptConnections(listen_socket)      
             inputW.append(client_connection)
         else: #we got a connection we have to read from
-            request = client_connection.recv(1024)
+            request = s.recv(1024)
             print request
             req = request.split("\r\n")
             protocal = req[0].split(" ")
@@ -190,6 +190,6 @@ while True:
                 print e
                 http_response = Requestapp("", "", 404).getResponse()
 
-            client_connection.sendall(http_response)
-            client_connection.close()
-            inputW.remove(client_connection)
+            s.sendall(http_response)
+            s.close()
+            inputW.remove(s)
